@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ostad_batch_fourteen/home_screen.dart';
 import 'package:ostad_batch_fourteen/sign_up_screen.dart';
 
 import 'firebase_options.dart';
@@ -15,6 +17,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: SignUpScreen());
+    return MaterialApp(
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, AsyncSnapshot<User?> snapshot) {
+          if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(child: Text(snapshot.error.toString())),
+            );
+          }
+
+          if (snapshot.hasData) {
+            return HomeScreen();
+          } else {
+            return SignUpScreen();
+          }
+        },
+      ),
+    );
   }
 }
