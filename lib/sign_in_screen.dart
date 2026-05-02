@@ -1,28 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ostad_batch_fourteen/sign_in_screen.dart';
+import 'package:ostad_batch_fourteen/home_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
-  final TextEditingController _confirmPasswordTEController =
-      TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _signUpInProgress = false;
+  bool _signInProgress = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sign Up')),
+      appBar: AppBar(title: Text('Sign In')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -58,28 +56,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: _confirmPasswordTEController,
-                  decoration: InputDecoration(
-                    hintText: 'Confirm Password',
-                    labelText: 'Confirm Password',
-                  ),
-                  validator: (String? value) {
-                    if ((value ?? '') != _passwordTEController.text) {
-                      return 'Does not match with password!';
-                    }
-                    return null;
-                  },
-                ),
                 Visibility(
-                  visible: _signUpInProgress == false,
+                  visible: _signInProgress == false,
                   replacement: CircularProgressIndicator(),
                   child: FilledButton(
-                    onPressed: _onTapSignUp,
-                    child: Text('Sign Up'),
+                    onPressed: _onTapSignIn,
+                    child: Text('Sign In'),
                   ),
                 ),
-                TextButton(onPressed: _onTapSignIn, child: Text('Sign In')),
+                TextButton(
+                  onPressed: _onTapSignUpButton,
+                  child: Text('Sign Up'),
+                ),
               ],
             ),
           ),
@@ -88,50 +76,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _onTapSignIn() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignInScreen()),
-    );
+  void _onTapSignUpButton() {
+    Navigator.pop(context);
   }
 
-  Future<void> _onTapSignUp() async {
+  Future<void> _onTapSignIn() async {
     if (_formKey.currentState!.validate()) {
       // TODO: Create a new user
       try {
-        _signUpInProgress = true;
+        _signInProgress = true;
         setState(() {});
-        final UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-              email: _emailTEController.text.trim(),
-              password: _passwordTEController.text,
-            );
-        _clearTextFields();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('New account has been created!')),
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailTEController.text.trim(),
+          password: _passwordTEController.text,
+        );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (predicate) => false,
         );
       } on Exception catch (e) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(e.toString())));
       } finally {
-        _signUpInProgress = false;
+        _signInProgress = false;
         setState(() {});
       }
     }
-  }
-
-  void _clearTextFields() {
-    _emailTEController.clear();
-    _passwordTEController.clear();
-    _confirmPasswordTEController.clear();
   }
 
   @override
   void dispose() {
     _emailTEController.dispose();
     _passwordTEController.dispose();
-    _confirmPasswordTEController.dispose();
     super.dispose();
   }
 }
