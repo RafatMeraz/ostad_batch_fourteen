@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'football_match.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,12 +12,96 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // bool _getMatchesInProgress = false;
+  // List<FootballScore> _footballMatchesList = [];
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getFootballMatches();
+  // }
+  //
+  // // One time get operation
+  // Future<void> _getFootballMatches() async {
+  //   _footballMatchesList.clear();
+  //   _getMatchesInProgress = true;
+  //   setState(() {});
+  //
+  //   QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+  //       .instance
+  //       .collection('football')
+  //       .get();
+  //   for (QueryDocumentSnapshot doc in snapshot.docs) {
+  //     _footballMatchesList.add(
+  //       FootballScore.fromJson(doc.id, doc.data() as Map<String, dynamic>),
+  //     );
+  //   }
+  //   _getMatchesInProgress = false;
+  //   setState(() {});
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home'), actions: [
-        IconButton(onPressed: _onTapLogout, icon: Icon(Icons.logout))
-      ],),
+      appBar: AppBar(
+        title: Text('Home'),
+        actions: [
+          IconButton(onPressed: _onTapLogout, icon: Icon(Icons.logout)),
+        ],
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('football').snapshots(),
+        builder:
+            (
+              context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> asyncSnapshot,
+            ) {
+              if (asyncSnapshot.connectionState == .waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (asyncSnapshot.hasError) {
+                return Center(child: Text(asyncSnapshot.error.toString()));
+              }
+
+              if (asyncSnapshot.hasData == false) {
+                return Center(child: Text('No data available'));
+              }
+
+              List<FootballMatch> footballMatchesList = [];
+              for (QueryDocumentSnapshot doc in asyncSnapshot.data!.docs) {
+                footballMatchesList.add(
+                  FootballMatch.fromJson(
+                    doc.id,
+                    doc.data() as Map<String, dynamic>,
+                  ),
+                );
+              }
+
+              return ListView.separated(
+                itemCount: footballMatchesList.length,
+                itemBuilder: (context, index) {
+                  final FootballMatch match = footballMatchesList[index];
+
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: match.isRunning
+                          ? Colors.green
+                          : Colors.grey,
+                      radius: 8,
+                    ),
+                    title: Text('${match.team1Name} vs ${match.team2Name}'),
+                    subtitle: Text('Winner team: ${match.winnerTeam}'),
+                    trailing: Text(
+                      '${match.team1Score} - ${match.team2Score}',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                },
+                separatorBuilder: (_, _) => Divider(height: 8),
+              );
+            },
+      ),
     );
   }
 
