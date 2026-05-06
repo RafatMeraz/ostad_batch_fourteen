@@ -28,4 +28,15 @@ class FootballMatch {
       isRunning: json['isRunning'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'team1_name': team1Name,
+      'team2_name': team2Name,
+      'winner_team': winnerTeam,
+      'team1_score': team1Score,
+      'team2_score': team2Score,
+      'isRunning': isRunning,
+    };
+  }
 }

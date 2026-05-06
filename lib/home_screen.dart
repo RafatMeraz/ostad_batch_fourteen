@@ -12,6 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final String _footballCollectionName = 'football';
+
   // bool _getMatchesInProgress = false;
   // List<FootballScore> _footballMatchesList = [];
   //
@@ -50,7 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('football').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection(_footballCollectionName)
+            .snapshots(),
         builder:
             (
               context,
@@ -83,18 +87,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final FootballMatch match = footballMatchesList[index];
 
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: match.isRunning
-                          ? Colors.green
-                          : Colors.grey,
-                      radius: 8,
-                    ),
-                    title: Text('${match.team1Name} vs ${match.team2Name}'),
-                    subtitle: Text('Winner team: ${match.winnerTeam}'),
-                    trailing: Text(
-                      '${match.team1Score} - ${match.team2Score}',
-                      style: TextStyle(fontSize: 20),
+                  return Dismissible(
+                    key: Key(match.id),
+                    onDismissed: (_) {
+                      _deleteMatchItem(match.id);
+                    },
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: match.isRunning
+                            ? Colors.green
+                            : Colors.grey,
+                        radius: 8,
+                      ),
+                      title: Text('${match.team1Name} vs ${match.team2Name}'),
+                      subtitle: Text('Winner team: ${match.winnerTeam}'),
+                      trailing: Text(
+                        '${match.team1Score} - ${match.team2Score}',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   );
                 },
@@ -102,7 +112,58 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onTapAddButton,
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void _onTapAddButton() {
+    try {
+      FootballMatch newFootballMatch = FootballMatch(
+          id: 'argvsuru',
+          team1Name: 'Argentina',
+          team2Name: 'Uruguay',
+          winnerTeam: 'Argentina',
+          team1Score: 1,
+          team2Score: 1,
+          isRunning: false
+      );
+
+      // Creates new item every time
+      // FirebaseFirestore.instance
+      //     .collection(_footballCollectionName)
+      //     .add(newFootballMatch.toJson());
+      // FirebaseFirestore.instance
+      //     .collection(_footballCollectionName)
+      //     .doc(newFootballMatch.id) // Because of this id
+      //     .update(newFootballMatch.toJson());
+      FirebaseFirestore.instance
+          .collection(_footballCollectionName)
+          .doc(newFootballMatch.id) // Because of this id
+          .set(newFootballMatch.toJson());
+    } on Exception catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString()))
+      );
+    }
+  }
+
+  Future<void> _deleteMatchItem(String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection(_footballCollectionName)
+          .doc(docId)
+          .delete();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Match deleted!'))
+      );
+    } on Exception catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()))
+      );
+    }
   }
 
   void _onTapLogout() {
