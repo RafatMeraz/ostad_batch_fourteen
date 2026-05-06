@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:ostad_batch_fourteen/sign_in_screen.dart';
 
@@ -18,6 +19,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _signUpInProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseCrashlytics.instance.log('Into sign up screen');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _onTapSignUp() async {
+    FirebaseCrashlytics.instance.log('Tapped on sign up button');
     if (_formKey.currentState!.validate()) {
       // TODO: Create a new user
       try {
@@ -111,6 +119,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           SnackBar(content: Text('New account has been created!')),
         );
       } on Exception catch (e) {
+        FirebaseCrashlytics.instance.log('Sign up exception $e');
+        throw Exception(e);
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text(e.toString())));
