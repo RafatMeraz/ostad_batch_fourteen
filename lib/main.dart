@@ -23,7 +23,8 @@ Future<void> main() async {
     return true;
   };
 
-  FcmUtils.initialize();
+  await FcmUtils.initialize();
+  print(await FcmUtils.getFCMToken());
 
   runApp(const MyApp());
 }

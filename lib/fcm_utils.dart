@@ -54,6 +54,26 @@ class FcmUtils {
       },
     );
   }
+
+  static Future<String?> getFCMToken() async {
+    // TODO: Send to the backend while you are logging in
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    return fcmToken;
+  }
+
+  static Future<void> onRefreshToken() async {
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      // TODO: Send to backend api (Refresh token)
+    });
+  }
+
+  static Future<void> subscribeToTopic(String topicName) async {
+    await FirebaseMessaging.instance.subscribeToTopic(topicName);
+  }
+
+  static Future<void> unsubscribeToTopic(String topicName) async {
+    await FirebaseMessaging.instance.unsubscribeFromTopic(topicName);
+  }
 }
 
 Future<void> handleBackgroundNotification(RemoteMessage message) async {}
