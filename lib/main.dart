@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ostad_batch_fourteen/fcm_utils.dart';
 import 'package:ostad_batch_fourteen/home_screen.dart';
 import 'package:ostad_batch_fourteen/sign_up_screen.dart';
@@ -25,6 +26,8 @@ Future<void> main() async {
 
   await FcmUtils.initialize();
   print(await FcmUtils.getFCMToken());
+  // Initialize the Mobile Ads SDK.
+  MobileAds.instance.initialize();
 
   runApp(const MyApp());
 }
