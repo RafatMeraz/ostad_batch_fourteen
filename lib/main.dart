@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ostad_batch_fourteen/fcm_utils.dart';
 import 'package:ostad_batch_fourteen/home_screen.dart';
+import 'package:ostad_batch_fourteen/maps_screen.dart';
 import 'package:ostad_batch_fourteen/sign_up_screen.dart';
 
 import 'firebase_options.dart';
@@ -41,22 +42,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.hasError) {
-            return Scaffold(
-              body: Center(child: Text(snapshot.error.toString())),
-            );
-          }
-
-          if (snapshot.hasData) {
-            return HomeScreen();
-          } else {
-            return SignUpScreen();
-          }
-        },
-      ),
+      home: MapsScreen(),
+      // home: StreamBuilder<User?>(
+      //   stream: FirebaseAuth.instance.authStateChanges(),
+      //   builder: (context, AsyncSnapshot<User?> snapshot) {
+      //     if (snapshot.hasError) {
+      //       return Scaffold(
+      //         body: Center(child: Text(snapshot.error.toString())),
+      //       );
+      //     }
+      //
+      //     if (snapshot.hasData) {
+      //       return HomeScreen();
+      //     } else {
+      //       return SignUpScreen();
+      //     }
+      //   },
+      // ),
     );
   }
 }
