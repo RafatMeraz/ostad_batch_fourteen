@@ -69,7 +69,7 @@ class _MapsScreenState extends State<MapsScreen> {
             //     ImageConfiguration(), 'path of your icon')
           ),
         },
-        circles: <Circle> {
+        circles: <Circle>{
           Circle(
             circleId: CircleId('red-zone'),
             center: LatLng(23.807251763483695, 90.368513725698),
@@ -93,24 +93,24 @@ class _MapsScreenState extends State<MapsScreen> {
               print('tapped on green-zone circle');
             },
             consumeTapEvents: true,
-          )
+          ),
         },
-        polylines: <Polyline> {
+        polylines: <Polyline>{
           Polyline(
             polylineId: PolylineId('road-to-office'),
             points: [
               LatLng(23.800150989663358, 90.37379465997219),
               LatLng(23.80321889796988, 90.37127338349819),
-              LatLng(23.800394866637248, 90.3688483312726)
+              LatLng(23.800394866637248, 90.3688483312726),
             ],
             width: 10,
             color: Colors.blue,
             endCap: .roundCap,
             startCap: .roundCap,
-            visible: true
-          )
+            visible: true,
+          ),
         },
-        polygons: <Polygon> {
+        polygons: <Polygon>{
           Polygon(
             polygonId: PolygonId('danger-area'),
             points: [
@@ -122,7 +122,7 @@ class _MapsScreenState extends State<MapsScreen> {
               LatLng(23.76607150865706, 90.36912761628628),
               LatLng(23.77268260579799, 90.36725409328938),
               LatLng(23.777047783131415, 90.36143001168966),
-              LatLng(23.779566123425163, 90.35585939884186)
+              LatLng(23.779566123425163, 90.35585939884186),
             ],
             fillColor: Colors.red.withAlpha(50),
             strokeColor: Colors.orange,
@@ -130,9 +130,44 @@ class _MapsScreenState extends State<MapsScreen> {
             consumeTapEvents: true,
             onTap: () {
               print('Tapped on danger area');
-            }
-          )
+            },
+          ),
         },
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: .spaceAround,
+        children: [
+          FloatingActionButton(
+            onPressed: _navigateToHome,
+            child: Icon(Icons.home),
+          ),
+          FloatingActionButton(
+            onPressed: _navigateToOffice,
+            child: Icon(Icons.home_repair_service_outlined),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToOffice() {
+    _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(23.800150989663358, 90.37379465997219),
+          zoom: 16,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToHome() {
+    _mapController?.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(23.800150989663358, 90.37379465997219),
+          zoom: 16,
+        ),
       ),
     );
   }

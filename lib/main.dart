@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: LocationScreen(),
+      home: MapsScreen(),
       // home: StreamBuilder<User?>(
       //   stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, AsyncSnapshot<User?> snapshot) {
