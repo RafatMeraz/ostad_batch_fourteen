@@ -1,6 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+// Business layer Q&N
+// Scope of Work - Crafty Bay App
+// Design - UI/UX -> Q&A
+// Project Initiate -> Define Project version
+
+// ----------- Coding -------------
+
+// Set up Firebase
+// Crashlytics
+// Analytics
+// Project structure -> MMVM, clean Arc, MVP, Onion
+
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
