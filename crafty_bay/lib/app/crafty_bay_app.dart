@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../features/auth/presentation/screens/splash_screen.dart';
+import 'app_theme.dart';
 import 'routes.dart';
 
 class CraftyBayApp extends StatelessWidget {
@@ -12,6 +13,8 @@ class CraftyBayApp extends StatelessWidget {
       title: 'Crafty Bay',
       initialRoute: SplashScreen.name,
       onGenerateRoute: AppRoutes.onGenerateRoute,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
     );
   }
 }
