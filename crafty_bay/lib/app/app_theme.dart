@@ -13,6 +13,12 @@ class AppTheme {
       color: AppColors.themeColor,
     ),
     scaffoldBackgroundColor: Colors.white,
+    textTheme: TextTheme(
+      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+      labelLarge: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+    ),
+    inputDecorationTheme: _inputDecorationTheme,
+    filledButtonTheme: _filledButtonTheme,
   );
 
   static final ThemeData _darkThemeData = ThemeData(
@@ -20,6 +26,37 @@ class AppTheme {
     brightness: Brightness.dark,
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.themeColor,
+    ),
+    inputDecorationTheme: _inputDecorationTheme,
+    textTheme: TextTheme(
+      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+      labelLarge: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+    ),
+    filledButtonTheme: _filledButtonTheme,
+  );
+
+  static final InputDecorationTheme _inputDecorationTheme =
+      InputDecorationTheme(
+        contentPadding: .only(left: 12),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.themeColor, width: 2),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.themeColor, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.themeColor, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        ),
+      );
+
+  static final FilledButtonThemeData _filledButtonTheme = FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      backgroundColor: AppColors.themeColor,
+      fixedSize: Size.fromWidth(double.maxFinite),
+      shape: RoundedRectangleBorder(borderRadius: .circular(8)),
     ),
   );
 }
