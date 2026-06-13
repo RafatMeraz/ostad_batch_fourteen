@@ -1,3 +1,4 @@
+import 'package:crafty_bay/app/providers/locale_provider.dart';
 import 'package:crafty_bay/app/providers/theme_mode_provider.dart';
 import 'package:crafty_bay/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -17,37 +18,43 @@ class CraftyBayApp extends StatefulWidget {
 
 class _CraftyBayAppState extends State<CraftyBayApp> {
   final ThemeModeProvider _themeModeProvider = ThemeModeProvider();
+  final LocaleProvider _localeProvider = LocaleProvider();
 
   @override
   void initState() {
     super.initState();
     _themeModeProvider.setDefaultThemeMode();
+    _localeProvider.setDefaultLocale();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: _themeModeProvider)],
-      child: Consumer<ThemeModeProvider>(
-        builder: (context, themeModeProvider, _) {
-          return MaterialApp(
-            title: 'Crafty Bay',
-            initialRoute: SplashScreen.name,
-            onGenerateRoute: AppRoutes.onGenerateRoute,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeModeProvider.themeMode,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              Locale('en'),
-              Locale('bn'),
-            ],
-            locale: Locale('bn'),
+      providers: [
+        ChangeNotifierProvider.value(value: _themeModeProvider),
+        ChangeNotifierProvider.value(value: _localeProvider),
+      ],
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, _) {
+          return Consumer<ThemeModeProvider>(
+            builder: (context, themeModeProvider, _) {
+              return MaterialApp(
+                title: 'Crafty Bay',
+                initialRoute: SplashScreen.name,
+                onGenerateRoute: AppRoutes.onGenerateRoute,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeModeProvider.themeMode,
+                localizationsDelegates: [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: localeProvider.supportedLocales,
+                locale: localeProvider.currentLocale,
+              );
+            },
           );
         },
       ),
