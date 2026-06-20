@@ -1,10 +1,12 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:crafty_bay/app/app_colors.dart';
-import 'package:crafty_bay/features/home/presentation/widgets/home_carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../shared/presentation/providers/main_nav_holder_provider.dart';
 import '../widgets/home_app_bar.dart';
+import '../widgets/home_carousel_slider.dart';
+import '../widgets/home_category_section.dart';
 import '../widgets/product_search_bar.dart';
+import '../widgets/section_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final textTheme = TextTheme.of(context);
+
     return Scaffold(
       appBar: HomeAppBar(),
       body: Padding(
@@ -25,7 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 16,
             children: [
               ProductSearchBar(),
-              HomeCarouselSlider()
+              HomeCarouselSlider(),
+              SectionHeader(headerText: 'Category', onTapSeeAll: () {
+                context.read<MainNavHolderProvider>().navigateToCategory();
+              }),
+              HomeCategorySection()
             ],
           ),
         ),

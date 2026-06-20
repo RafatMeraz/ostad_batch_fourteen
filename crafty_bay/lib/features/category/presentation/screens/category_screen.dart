@@ -1,0 +1,47 @@
+import 'package:crafty_bay/features/shared/presentation/providers/main_nav_holder_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../shared/presentation/widgets/category_card.dart';
+
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key});
+
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (_, _) => _backToHome(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Category'),
+          leading: IconButton(
+              onPressed: _backToHome,
+              icon: Icon(Icons.arrow_back_ios),
+          ),
+        ),
+        body: Padding(
+          padding: .symmetric(horizontal: 8),
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 8,
+            ),
+            itemBuilder: (context, index) {
+              return FittedBox(child: CategoryCard());
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _backToHome() {
+    context.read<MainNavHolderProvider>().backToHome();
+  }
+}
