@@ -1,4 +1,5 @@
 import 'package:crafty_bay/app/app_colors.dart';
+import 'package:crafty_bay/features/cart/presentation/screens/cart_screen.dart';
 import 'package:crafty_bay/features/category/presentation/screens/category_screen.dart';
 import 'package:crafty_bay/features/home/presentation/screens/home_screen.dart';
 import 'package:crafty_bay/features/wishlist/presentation/screens/wishlist_screen.dart';
@@ -20,7 +21,7 @@ class _MainNavHolderScreenState extends State<MainNavHolderScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
     CategoryScreen(),
-    HomeScreen(),
+    CartScreen(),
     WishlistScreen(),
   ];
 
