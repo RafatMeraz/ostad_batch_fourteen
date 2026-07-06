@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../shared/presentation/screens/main_nav_holder_screen.dart';
 import '../widgets/app_logo.dart';
+import 'sign_up_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToNextScreen() async {
     await Future.delayed(Duration(seconds: 2));
     Navigator.pushNamedAndRemoveUntil(
-        context, MainNavHolderScreen.name, (predicate) => false);
+        context, SignUpScreen.name, (predicate) => false);
   }
 
   @override
