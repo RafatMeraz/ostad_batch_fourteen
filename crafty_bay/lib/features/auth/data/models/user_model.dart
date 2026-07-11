@@ -1,14 +1,3 @@
-// "_id": "69e4c459360da9d1207182ea",
-// "first_name": "Meskatul",
-// "last_name": "Islam",
-// "email": "meskatcse@gmail.com",
-// "email_verified": true,
-// "phone": "01754658781",
-// "phone_verified": false,
-// "avatar_url": null,
-// "city": "Chattogram",
-// "role": 0
-
 class UserModel {
   final String id;
   final String firstName;
@@ -32,5 +21,15 @@ class UserModel {
       lastName: jsonData['last_name'],
       id: jsonData['_id'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'city': city,
+      'first_name': firstName,
+      'last_name': lastName,
+      '_id': id,
+    };
   }
 }
