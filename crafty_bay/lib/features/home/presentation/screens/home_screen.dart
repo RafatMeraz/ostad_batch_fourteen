@@ -1,3 +1,5 @@
+import 'package:crafty_bay/features/home/presentation/providers/home_sliders_provider.dart';
+import 'package:crafty_bay/features/shared/presentation/widgets/centered_progress_indicator.dart';
 import 'package:crafty_bay/features/shared/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +21,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final textTheme = TextTheme.of(context);
-
     return Scaffold(
       appBar: HomeAppBar(),
       body: Padding(
@@ -30,7 +30,20 @@ class _HomeScreenState extends State<HomeScreen> {
             spacing: 16,
             children: [
               ProductSearchBar(),
-              HomeCarouselSlider(),
+              Consumer<HomeSlidersProvider>(
+                builder: (context, homeSliderProvider, _) {
+                  if (homeSliderProvider.getSlidersInProgress) {
+                    return SizedBox(
+                      height: 180,
+                      child: CenteredProcessIndicator(),
+                    );
+                  }
+
+                  return HomeCarouselSlider(
+                    sliders: homeSliderProvider.sliders,
+                  );
+                },
+              ),
               SectionHeader(
                 headerText: 'Category',
                 onTapSeeAll: () {
