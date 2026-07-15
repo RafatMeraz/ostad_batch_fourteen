@@ -1,5 +1,6 @@
 import 'package:crafty_bay/app/app_colors.dart';
 import 'package:crafty_bay/features/cart/presentation/screens/cart_screen.dart';
+import 'package:crafty_bay/features/category/presentation/category_list_provider.dart';
 import 'package:crafty_bay/features/category/presentation/screens/category_screen.dart';
 import 'package:crafty_bay/features/home/presentation/providers/home_sliders_provider.dart';
 import 'package:crafty_bay/features/home/presentation/screens/home_screen.dart';
@@ -27,17 +28,22 @@ class _MainNavHolderScreenState extends State<MainNavHolderScreen> {
   ];
 
   final HomeSlidersProvider _homeSlidersProvider = HomeSlidersProvider();
+  final CategoryListProvider _categoryListProvider = CategoryListProvider();
 
   @override
   void initState() {
     super.initState();
     _homeSlidersProvider.getSliders();
+    _categoryListProvider.getCategoryData();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: _homeSlidersProvider)],
+      providers: [
+        ChangeNotifierProvider.value(value: _homeSlidersProvider),
+        ChangeNotifierProvider.value(value: _categoryListProvider),
+      ],
       child: Consumer<MainNavHolderProvider>(
         builder: (context, mainNavHolderProvider, _) {
           return Scaffold(
