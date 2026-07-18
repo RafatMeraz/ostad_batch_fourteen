@@ -11,4 +11,7 @@ class Urls {
 
   static String productListUrl(int currentPage, int productsPerPage) =>
       '$_baseUrl/products?count=$productsPerPage&page=$currentPage';
+
+  static String productDetailsUrl(String productId) =>
+      '$_baseUrl/products/id/$productId';
 }
