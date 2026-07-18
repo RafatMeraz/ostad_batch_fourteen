@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../app/get_network_caller.dart';
-import '../../../app/urls.dart';
-import '../../../core/service/network_caller/network_caller.dart';
-import '../data/models/category_model.dart';
+import '../../../../app/get_network_caller.dart';
+import '../../../../app/urls.dart';
+import '../../../../core/service/network_caller/network_caller.dart';
+import '../../data/models/category_model.dart';
 
 class CategoryListProvider extends ChangeNotifier {
   final int _categoryPerPage = 32;

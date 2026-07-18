@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SingleChildScrollView(
                 scrollDirection: .horizontal,
                 child: Row(
-                  children: [1, 2, 3, 4, 5].map((e) => ProductCard()).toList(),
+                  // children: [1, 2, 3, 4, 5].map((e) => ProductCard()).toList(),
                 ),
               ),
             ],

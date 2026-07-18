@@ -1,4 +1,4 @@
-import 'package:crafty_bay/features/category/presentation/category_list_provider.dart';
+import 'package:crafty_bay/features/category/presentation/providers/category_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

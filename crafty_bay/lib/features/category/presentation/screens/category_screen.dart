@@ -1,4 +1,4 @@
-import 'package:crafty_bay/features/category/presentation/category_list_provider.dart';
+import 'package:crafty_bay/features/category/presentation/providers/category_list_provider.dart';
 import 'package:crafty_bay/features/shared/presentation/providers/main_nav_holder_provider.dart';
 import 'package:crafty_bay/features/shared/presentation/widgets/centered_progress_indicator.dart';
 import 'package:flutter/material.dart';

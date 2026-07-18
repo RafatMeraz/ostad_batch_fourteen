@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../shared/presentation/widgets/centered_progress_indicator.dart';
 import '../../../shared/presentation/widgets/product_card.dart';
+import '../providers/product_list_provider.dart';
 
 class ProductListByCategoryScreen extends StatefulWidget {
   const ProductListByCategoryScreen({
@@ -21,21 +24,68 @@ class ProductListByCategoryScreen extends StatefulWidget {
 
 class _ProductListByCategoryScreenState
     extends State<ProductListByCategoryScreen> {
+  final ProductListProvider _productListProvider = ProductListProvider();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _productListProvider.getProductData();
+    _scrollController.addListener(_loadMore);
+  }
+
+  void _loadMore() {
+    if ((_productListProvider.isLoading == false) &&
+        _scrollController.position.extentBefore < 300) {
+      _productListProvider.getProductData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.categoryName)),
-      body: GridView.builder(
-        itemCount: 12,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 4
+    return ChangeNotifierProvider.value(
+      value: _productListProvider,
+      child: Scaffold(
+        appBar: AppBar(title: Text(widget.categoryName)),
+        body: Consumer<ProductListProvider>(
+          builder: (context, productListProvider, _) {
+            if (productListProvider.isInitialLoading) {
+              return CenteredProcessIndicator();
+            }
+
+            return Column(
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    itemCount: productListProvider.productList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 4,
+                    ),
+                    itemBuilder: (context, index) {
+                      return FittedBox(
+                        child: ProductCard(
+                          productModel: productListProvider.productList[index],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                if (productListProvider.isLoadingMore)
+                  LinearProgressIndicator(),
+              ],
+            );
+          },
         ),
-        itemBuilder: (context, index) {
-          return FittedBox(child: ProductCard());
-        },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
