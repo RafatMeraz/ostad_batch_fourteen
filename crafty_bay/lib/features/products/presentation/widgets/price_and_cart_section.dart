@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/constants.dart';
+import '../../../cart/presentation/providers/add_to_cart_provider.dart';
+import '../../../shared/presentation/widgets/centered_progress_indicator.dart';
 
-class PriceAndCartSection extends StatelessWidget {
-  const PriceAndCartSection({super.key});
+class PriceAndCartSection extends StatefulWidget {
+  const PriceAndCartSection({super.key, required this.onTapAddToCart});
 
+  final VoidCallback onTapAddToCart;
+
+  @override
+  State<PriceAndCartSection> createState() => _PriceAndCartSectionState();
+}
+
+class _PriceAndCartSectionState extends State<PriceAndCartSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +43,18 @@ class PriceAndCartSection extends StatelessWidget {
           ),
           SizedBox(
             width: 140,
-            child: FilledButton(onPressed: () {}, child: Text('Add to Cart')),
+            child: Consumer<AddToCartProvider>(
+              builder: (context, addToCartProvider, _) {
+                if (addToCartProvider.isLoading) {
+                  return CenteredProcessIndicator();
+                }
+
+                return FilledButton(
+                    onPressed: widget.onTapAddToCart,
+                    child: Text('Add to Cart'),
+                );
+              }
+            ),
           ),
         ],
       ),

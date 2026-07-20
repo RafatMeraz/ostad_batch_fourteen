@@ -1,5 +1,10 @@
+import 'package:crafty_bay/app/providers/auth_controller.dart';
+import 'package:crafty_bay/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:crafty_bay/features/cart/data/models/add_to_cart_params.dart';
+import 'package:crafty_bay/features/cart/presentation/providers/add_to_cart_provider.dart';
 import 'package:crafty_bay/features/products/presentation/providers/product_details_provider.dart';
 import 'package:crafty_bay/features/shared/presentation/widgets/centered_progress_indicator.dart';
+import 'package:crafty_bay/features/shared/presentation/widgets/snack_bar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +29,11 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final ProductDetailsProvider _productDetailsProvider =
       ProductDetailsProvider();
+  final AddToCartProvider _addToCartProvider = AddToCartProvider();
+
+  String? _selectedColor;
+  String? _selectedSize;
+  int _quantity = 1;
 
   @override
   void initState() {
@@ -56,9 +66,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        ProductImageCarousel(
-                          photos: productModel.photos,
-                        ),
+                        ProductImageCarousel(photos: productModel.photos),
                         Padding(
                           padding: .symmetric(horizontal: 16),
                           child: Column(
@@ -81,7 +89,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     child: IncDecButton(
                                       maxCount: productModel.quantity,
                                       minCount: 1,
-                                      initialValue: 1,
+                                      initialValue: _quantity,
                                       onChange: (newValue) {},
                                     ),
                                   ),
@@ -131,6 +139,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       colors: productModel.colors,
                                       onChange: (String selectedColor) {
                                         debugPrint(selectedColor);
+                                        _selectedColor = selectedColor;
                                       },
                                     ),
                                     const SizedBox(height: 16),
@@ -145,8 +154,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     const SizedBox(height: 12),
                                     SizePicker(
                                       sizes: productModel.sizes,
-                                      onChange: (String selectedColor) {
-                                        debugPrint(selectedColor);
+                                      onChange: (String selectedSize) {
+                                        debugPrint(selectedSize);
+                                        _selectedSize = selectedSize;
                                       },
                                     ),
                                     const SizedBox(height: 16),
@@ -167,13 +177,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
                 ),
-                PriceAndCartSection(),
+                ChangeNotifierProvider.value(
+                  value: _addToCartProvider,
+                  child: PriceAndCartSection(onTapAddToCart: _onTapAddToCart),
+                ),
               ],
             );
           },
         ),
       ),
     );
+  }
+
+  Future<void> _onTapAddToCart() async {
+    if (await AuthController.isLoggedIn() == false) {
+      Navigator.pushNamed(context, SignInScreen.name);
+      return;
+    }
+
+    AddToCartParams params = AddToCartParams(
+      productId: widget.productId,
+      color: _selectedColor,
+      size: _selectedSize,
+      quantity: _quantity,
+    );
+
+    final isSuccess = await _addToCartProvider.addToCart(params);
+    if (isSuccess) {
+      showSnackBarMessage(context, 'Added to cart');
+    } else {
+      showSnackBarMessage(context, _addToCartProvider.errorMessage!);
+    }
   }
 
   Widget _sectionHeader(String header) {
