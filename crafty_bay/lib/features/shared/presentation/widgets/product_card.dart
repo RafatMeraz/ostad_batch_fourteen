@@ -1,4 +1,4 @@
-import 'package:crafty_bay/features/products/data/models/product_model.dart';
+import 'package:crafty_bay/features/shared/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/app_colors.dart';
