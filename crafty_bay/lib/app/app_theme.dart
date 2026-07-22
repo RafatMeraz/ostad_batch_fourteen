@@ -12,31 +12,70 @@ class AppTheme {
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.themeColor,
     ),
-    scaffoldBackgroundColor: Colors.white,
-    textTheme: TextTheme(
-      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-      titleMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-      labelLarge: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+    scaffoldBackgroundColor: AppColors.lightScaffoldBackground,
+    cardColor: AppColors.lightCardBackground,
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: AppColors.lightPrimaryText,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: AppColors.lightPrimaryText,
+      ),
+      labelLarge: TextStyle(
+        color: AppColors.lightSecondaryText,
+        fontWeight: FontWeight.w400,
+      ),
     ),
     inputDecorationTheme: _inputDecorationTheme,
     filledButtonTheme: _filledButtonTheme,
-    appBarTheme: AppBarTheme(backgroundColor: Colors.white, titleTextStyle: TextStyle(
-      fontSize: 16,
-      color: Colors.black,
-      fontWeight: FontWeight.w600
-    ),)
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.lightScaffoldBackground,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        fontSize: 16,
+        color: AppColors.lightPrimaryText,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
   );
 
   static final ThemeData _darkThemeData = ThemeData(
     colorSchemeSeed: AppColors.themeColor,
     brightness: Brightness.dark,
+    scaffoldBackgroundColor: AppColors.darkScaffoldBackground,
+    cardColor: AppColors.darkCardBackground,
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: AppColors.themeColor,
     ),
     inputDecorationTheme: _inputDecorationTheme,
-    textTheme: TextTheme(
-      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-      labelLarge: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: AppColors.darkPrimaryText,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: AppColors.darkPrimaryText,
+      ),
+      labelLarge: TextStyle(
+        color: AppColors.darkSecondaryText,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.darkScaffoldBackground,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        fontSize: 16,
+        color: AppColors.darkPrimaryText,
+        fontWeight: FontWeight.w600,
+      ),
     ),
     filledButtonTheme: _filledButtonTheme,
   );
