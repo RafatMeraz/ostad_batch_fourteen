@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
@@ -9,8 +10,9 @@ class NetworkCaller {
   final Logger _logger = Logger();
 
   final Map<String, String> Function() headers;
+  final VoidCallback onUnauthorized;
 
-  NetworkCaller({required this.headers});
+  NetworkCaller({required this.headers, required this.onUnauthorized});
 
   // Get
   Future<NetworkResponse> getRequest(String url) async {
@@ -28,6 +30,14 @@ class NetworkCaller {
           isSuccess: true,
           statusCode: response.statusCode,
           body: decodedJson,
+        );
+      } else if (response.statusCode == 401) {
+        // Unauthorized
+        onUnauthorized();
+        return NetworkResponse(
+          isSuccess: false,
+          statusCode: response.statusCode,
+          errorMessage: 'Unauthorized',
         );
       } else {
         // Failed
@@ -54,6 +64,7 @@ class NetworkCaller {
   Future<NetworkResponse> postRequest(
     String url, {
     Map<String, dynamic>? body,
+    bool isFromLogin = false
   }) async {
     try {
       Uri uri = Uri.parse(url);
@@ -73,6 +84,14 @@ class NetworkCaller {
           isSuccess: true,
           statusCode: response.statusCode,
           body: decodedJson,
+        );
+      } else if (response.statusCode == 401 && isFromLogin == false) {
+        // Unauthorized
+        onUnauthorized();
+        return NetworkResponse(
+          isSuccess: false,
+          statusCode: response.statusCode,
+          errorMessage: 'Unauthorized',
         );
       } else {
         // Failed
