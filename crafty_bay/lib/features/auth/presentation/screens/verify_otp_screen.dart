@@ -1,13 +1,14 @@
-import 'package:crafty_bay/features/auth/presentation/providers/verify_otp_provider.dart';
-import 'package:crafty_bay/features/shared/presentation/widgets/centered_progress_indicator.dart';
-import 'package:crafty_bay/features/shared/presentation/widgets/snack_bar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
+import '../../../shared/presentation/screens/main_nav_holder_screen.dart';
+import '../../../shared/presentation/widgets/centered_progress_indicator.dart';
+import '../../../shared/presentation/widgets/snack_bar_message.dart';
 import '../../data/models/verify_otp_params.dart';
 import '../providers/otp_timer_provider.dart';
+import '../providers/verify_otp_provider.dart';
 import '../widgets/app_logo.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
@@ -135,8 +136,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     );
 
     if (isSuccess) {
-      // Navigate to next screen or show success
-
+      Navigator.pushNamedAndRemoveUntil(
+          context, MainNavHolderScreen.name, (predicate) => false);
     } else {
       showSnackBarMessage(context, _verifyOtpProvider.errorMessage!);
     }
