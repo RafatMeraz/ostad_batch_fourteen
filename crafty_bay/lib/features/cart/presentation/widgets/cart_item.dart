@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/asset_paths.dart';
 import '../../../../app/constants.dart';
 import '../../../shared/presentation/widgets/inc_dec_button.dart';
+import '../../data/models/cart_model.dart';
+import '../providers/cart_list_provider.dart';
 
 class CartItem extends StatelessWidget {
-  const CartItem({super.key});
+  const CartItem({super.key, required this.cartItemModel});
+
+  final CartItemModel cartItemModel;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +37,20 @@ class CartItem extends StatelessWidget {
                           crossAxisAlignment: .start,
                           children: [
                             Text(
-                              'Title of product',
+                              cartItemModel.product.title,
                               style: TextStyle(fontSize: 16),
                             ),
                             Text(
-                              'Color: Red   Size: XL',
+                              'Color: ${cartItemModel.color ?? ''}   Size: ${cartItemModel.size ?? ''}',
                               style: TextStyle(color: Colors.black54),
                             ),
                           ],
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: Implement delete cart api
+                        },
                         icon: Icon(Icons.delete_outline),
                       ),
                     ],
@@ -52,7 +59,7 @@ class CartItem extends StatelessWidget {
                     mainAxisAlignment: .spaceBetween,
                     children: [
                       Text(
-                        '${Constants.takaSign}100',
+                        '${Constants.takaSign}${cartItemModel.product.price}',
                         style: TextStyle(
                           fontWeight: .w600,
                           fontSize: 18,
@@ -62,11 +69,16 @@ class CartItem extends StatelessWidget {
                       SizedBox(
                         width: 90,
                         child: IncDecButton(
-                          maxCount: 20,
+                          maxCount: cartItemModel.product.quantity,
                           minCount: 1,
-                          initialValue: 1,
+                          initialValue: cartItemModel.quantity,
                           onChange: (int value) {
-                            print(value);
+                            context
+                                .read<CartListProvider>()
+                                .updateCartItemQuantity(
+                                  cartItemModel.id,
+                                  value,
+                                );
                           },
                         ),
                       ),

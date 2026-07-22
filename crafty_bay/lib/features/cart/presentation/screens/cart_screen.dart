@@ -1,3 +1,4 @@
+import 'package:crafty_bay/features/cart/presentation/providers/cart_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,30 +14,55 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final CartListProvider _cartListProvider = CartListProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    _cartListProvider.getCartList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (_, _) => _backToHome(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Cart'),
-          leading: IconButton(
-            onPressed: _backToHome,
-            icon: Icon(Icons.arrow_back_ios),
-          ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return CartItem();
-                },
-              ),
+    return ChangeNotifierProvider.value(
+      value: _cartListProvider,
+      child: PopScope(
+        onPopInvokedWithResult: (_, _) => _backToHome(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Cart'),
+            leading: IconButton(
+              onPressed: _backToHome,
+              icon: Icon(Icons.arrow_back_ios),
             ),
-            TotalPriceAndCheckoutSection(),
-          ],
+          ),
+          body: Consumer<CartListProvider>(
+            builder: (context, _, _) {
+              if (_cartListProvider.isLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (_cartListProvider.errorMessage != null) {
+                return Center(child: Text(_cartListProvider.errorMessage!));
+              }
+
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _cartListProvider.cartList.length,
+                      itemBuilder: (context, index) {
+                        return CartItem(
+                          cartItemModel: _cartListProvider.cartList[index],
+                        );
+                      },
+                    ),
+                  ),
+                  TotalPriceAndCheckoutSection(),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
