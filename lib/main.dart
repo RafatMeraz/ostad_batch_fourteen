@@ -8,6 +8,7 @@ import 'package:ostad_batch_fourteen/fcm_utils.dart';
 import 'package:ostad_batch_fourteen/home_screen.dart';
 import 'package:ostad_batch_fourteen/location_screen.dart';
 import 'package:ostad_batch_fourteen/maps_screen.dart';
+import 'package:ostad_batch_fourteen/ml_home.dart';
 import 'package:ostad_batch_fourteen/sign_up_screen.dart';
 
 import 'firebase_options.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: MapsScreen(),
+      home: MachineLearningHome(),
       // home: StreamBuilder<User?>(
       //   stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, AsyncSnapshot<User?> snapshot) {
